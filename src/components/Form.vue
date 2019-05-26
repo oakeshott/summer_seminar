@@ -40,9 +40,9 @@ export default {
     },
     resetSelectingMode () {
       var svg = d3.select('#data-viz')
-      svg.selectAll('line').attr('selecting-mode', false)
-      svg.selectAll('line').attr('selected', false)
-      svg.selectAll('line').attr('stroke', '#aaa')
+      svg.selectAll('line.link').attr('selecting-mode', false)
+      svg.selectAll('line.link').attr('selected', false)
+      svg.selectAll('line.link').attr('stroke', '#aaa')
       this.isActive = !this.isActive
     },
     submitRoute () {
@@ -54,6 +54,7 @@ export default {
         svg.select('#link' + d.id)
           .attr('flow', this.$store.getters.getLinkById(d.id).flow)
         route.push(d.id)
+        console.log(this.$store.getters.getNodeById(d.source))
       })
       var item = {
         id: this.$store.state.items.length,
@@ -85,7 +86,7 @@ export default {
         .attr('stroke', '#ff6347')
         .attr('class', 'link-res')
         .attr('flow', (d) => { return d.flow })
-        .attr('stroke-width', (d) => { return parseInt(d.flow) + 1 })
+        .attr('stroke-width', (d) => { return parseInt(d.flow) })
         .attr('selecting-mode', 'false')
         .attr('selected', 'false')
         .attr('x1', (d) => { return d.source.x })
@@ -96,7 +97,7 @@ export default {
           div.transition()
             .duration(500)
             .style('opacity', 1.0)
-          div.html('<span>link-id: ' + d.id + '</span><br/>' + '<span>flow: ' + d.flow + '</span>')
+          div.html('<span>link-id: ' + d.id + '</span><br/>' + '<span>flow: ' + d.flow + '</span><br/>' + '<span>travel free time: ' + d.t0 + '</span><br/>' + '<span>capacity: ' + d.c + '</span>')
             .style('left', (d3.event.pageX) + 'px')
             .style('top', (d3.event.pageY - 28) + 'px')
         })
@@ -109,7 +110,7 @@ export default {
         .data(this.$store.state.nodes)
         .enter()
         .append('circle')
-        .attr('r', 10)
+        .attr('r', 20)
         .attr('id', (d, i) => { return 'node0' + i })
         .attr('class', 'node-res')
         .attr('fill', '#69b3a2')
@@ -128,6 +129,17 @@ export default {
             .duration(500)
             .style('opacity', 0.0)
         })
+      var text2 = svg2.selectAll('text')
+        .data(this.$store.state.nodes)
+        .enter()
+        .append('text')
+        .attr('x', (d) => { return d.x })
+        .attr('y', (d) => { return d.y })
+        .attr('text-anchor', 'middle')
+        .style('fill', 'dimgray')
+        .attr('dominant-baseline', 'middle')
+        .text((d) => { return d.name })
+
       var ticked2 = () => {
         link2
           .attr('x1', (d) => { return d.source.x })
@@ -138,6 +150,10 @@ export default {
         node2
           .attr('cx', (d) => { return d.x })
           .attr('cy', (d) => { return d.y })
+
+        text2
+          .attr('x', (d) => { return d.x })
+          .attr('y', (d) => { return d.y })
       }
       d3.forceSimulation(this.$store.state.nodes)
         .force('link', d3.forceLink()

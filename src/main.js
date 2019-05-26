@@ -72,7 +72,7 @@ new Vue({
         div.transition()
           .duration(500)
           .style('opacity', 1.0)
-        div.html('<span>link-id: ' + d.id + '</span><br/>' + '<span>flow: ' + d.flow + '</span>')
+        div.html('<span>link-id: ' + d.id + '</span><br/>' + '<span>flow: ' + d.flow + '</span><br/>' + '<span>travel free time: ' + d.t0 + '</span><br/>' + '<span>capacity: ' + d.c + '</span>')
           .style('left', (d3.event.pageX) + 'px')
           .style('top', (d3.event.pageY - 28) + 'px')
       })
@@ -101,7 +101,7 @@ new Vue({
       .data(store.state.nodes)
       .enter()
       .append('circle')
-      .attr('r', 10)
+      .attr('r', 20)
       .attr('id', (d, i) => { return 'node' + i })
       .attr('class', 'node')
       .attr('fill', '#69b3a2')
@@ -122,6 +122,16 @@ new Vue({
           .duration(500)
           .style('opacity', 0.0)
       })
+    var text = svg.selectAll('text')
+      .data(store.state.nodes)
+      .enter()
+      .append('text')
+      .attr('x', (d) => { return d.x })
+      .attr('y', (d) => { return d.y })
+      .attr('text-anchor', 'middle')
+      .style('fill', 'dimgray')
+      .attr('dominant-baseline', 'middle')
+      .text((d) => { return d.name })
     var ticked = () => {
       link
         .attr('x1', (d) => { return d.source.x })
@@ -132,6 +142,10 @@ new Vue({
       node
         .attr('cx', (d) => { return d.x })
         .attr('cy', (d) => { return d.y })
+
+      text
+        .attr('x', (d) => { return d.x })
+        .attr('y', (d) => { return d.y })
     }
     d3.forceSimulation(store.state.nodes)
       .force('link', d3.forceLink()
@@ -168,7 +182,7 @@ new Vue({
         div.transition()
           .duration(500)
           .style('opacity', 1.0)
-        div.html('<span>link-id: ' + d.id + '</span><br/>' + '<span>flow: ' + d.flow + '</span>')
+        div.html('<span>link-id: ' + d.id + '</span><br/>' + '<span>flow: ' + d.flow + '</span><br/>' + '<span>travel free time: ' + d.t0 + '</span><br/>' + '<span>capacity: ' + d.c + '</span>')
           .style('left', (d3.event.pageX) + 'px')
           .style('top', (d3.event.pageY - 28) + 'px')
       })
@@ -181,7 +195,7 @@ new Vue({
       .data(store.state.nodes)
       .enter()
       .append('circle')
-      .attr('r', 10)
+      .attr('r', 20)
       .attr('id', (d, i) => { return 'node0' + i })
       .attr('class', 'node-res')
       .attr('fill', '#69b3a2')
@@ -200,6 +214,16 @@ new Vue({
           .duration(500)
           .style('opacity', 0.0)
       })
+    var text2 = svg2.selectAll('text')
+      .data(store.state.nodes)
+      .enter()
+      .append('text')
+      .attr('x', (d) => { return d.x })
+      .attr('y', (d) => { return d.y })
+      .attr('text-anchor', 'middle')
+      .style('fill', 'dimgray')
+      .attr('dominant-baseline', 'middle')
+      .text((d) => { return d.name })
     var ticked2 = () => {
       link2
         .attr('x1', (d) => { return d.source.x })
@@ -210,6 +234,10 @@ new Vue({
       node2
         .attr('cx', (d) => { return d.x })
         .attr('cy', (d) => { return d.y })
+
+      text2
+        .attr('x', (d) => { return d.x })
+        .attr('y', (d) => { return d.y })
     }
     d3.forceSimulation(store.state.nodes)
       .force('link', d3.forceLink()

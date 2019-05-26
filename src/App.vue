@@ -3,25 +3,14 @@
     <v-toolbar dark color="primary">
       <v-toolbar-side-icon></v-toolbar-side-icon>
 
-      <v-toolbar-title class="white--text">Title</v-toolbar-title>
+      <v-toolbar-title class="white--text">Selfish routing</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
-        <v-icon>search</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>apps</v-icon>
-      </v-btn>
-
-      <v-btn icon>
+      <v-btn icon v-on:click="reload">
         <v-icon>refresh</v-icon>
       </v-btn>
 
-      <v-btn icon>
-        <v-icon>more_vert</v-icon>
-      </v-btn>
     </v-toolbar>
     <router-view/>
   </v-app>
@@ -29,7 +18,12 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  methods: {
+    reload: function () {
+      window.location.reload()
+    }
+  }
 }
 </script>
 
@@ -48,7 +42,7 @@ div.tooltip {
   position: absolute;
   text-align: center;
   width: 160px;
-  height: 40px;
+  height: 80px;
   padding: 2px;
   font: 14px sans-serif;
   background: #696969;

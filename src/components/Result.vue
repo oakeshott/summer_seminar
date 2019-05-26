@@ -8,7 +8,8 @@
       <template v-slot:items="props">
         <td>{{ props.item.id }}</td>
         <td>{{ props.item.route }}</td>
-        <td>{{ traveltime(props.item.route) }}</td>
+        <td>{{ totalFlow(props.item.route) }}</td>
+        <td>{{ totalTraveltime(props.item.route) }}</td>
         <td class="justify-center layout px-0">
           <v-icon
             small
@@ -27,6 +28,7 @@
       <template v-slot:items="props">
         <td>{{ props.item.id }}</td>
         <td>{{ props.item.flow }}</td>
+        <td>{{ traveltime(props.item.id) }}</td>
       </template>
     </v-data-table>
   </div>
@@ -46,6 +48,10 @@ export default {
         {
           text: 'Flow',
           value: 'flow'
+        },
+        {
+          text: 'Travel time',
+          value: 'name'
         }
       ],
       headers: [
@@ -59,15 +65,30 @@ export default {
           value: 'route'
         },
         {
-          text: 'Travel time (totalflow)',
+          text: 'Travel flow',
           value: 'name'
+        },
+        {
+          text: 'Travel time',
+          value: 'name',
+          sortable: true
         },
         { text: 'Actions', value: 'name', sortable: false }
       ]
     }
   },
   methods: {
-    traveltime (route) {
+    traveltime (id) {
+      return this.$store.getters.traveltime(id)
+    },
+    totalTraveltime (route) {
+      var t = 0
+      for (let l of route) {
+        t += parseFloat(this.$store.getters.traveltime(l))
+      }
+      return t
+    },
+    totalFlow (route) {
       var f = 0
       for (let l of route) {
         f += parseInt(this.$store.getters.getLinkById(l).flow)
